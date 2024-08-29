@@ -1,25 +1,9 @@
-import LogoIcon from "./lib/icons/logoIcon";
+import Header from "@/components/layout/Header";
 
 function App() {
   return (
     <body className="text-gray-600">
-      <header className="w-full flex justify-between items-center px-20 py-4 shadow-md fixed bg-white/30 backdrop-blur-[3px] z-[2]">
-        <div className="flex gap-3">
-          <LogoIcon />
-          <p className="text-blue-400">FitMonitor</p>
-        </div>
-        <nav className="flex gap-4 text-gray-600">
-          <a href="#about-us" className="hover:underline hover:text-blue-400">
-            Про нас
-          </a>
-          <a href="#services" className="hover:underline hover:text-blue-400">
-            Послуги
-          </a>
-          <a href="#contacts" className="hover:underline hover:text-blue-400">
-            Контакти
-          </a>
-        </nav>
-      </header>
+      <Header />
       <main className="py-20 px-64">
         <div id="about-us">
           <p className="absolute top-40 left-44 text-[50px] text-gray-600 w-[700px]">
