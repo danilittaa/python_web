@@ -19,19 +19,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
+import axios from "@/axiosConfig";
 
 interface IProps {
   children: React.ReactNode;
 }
 const formSchema = z.object({
-  email: z
-    .string()
-    .min(2, {
-      message: "Пошта має бути довша 2 символів.",
-    })
-    .email({
-      message: "Неправильний формат пошти.",
-    }),
+  username: z.string().min(2, {
+    message: "Імя має бути довша 2 символів.",
+  }),
   password: z.string().min(2, {
     message: "Пароль має бути довшим 2 символів.",
   }),
@@ -41,14 +37,20 @@ const SignInPopup: React.FC<IProps> = ({ children }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
   const navigate = useNavigate();
 
-  const onSubmit = (values: any) => {
-    navigate("/home");
+  const onSubmit = async (values: any) => {
+    try {
+      const res = await axios.post("login/", values);
+      localStorage.setItem("role", res.data.user.role);
+      navigate("/home");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -62,12 +64,12 @@ const SignInPopup: React.FC<IProps> = ({ children }) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Емейл</FormLabel>
+                  <FormLabel>Імя</FormLabel>
                   <FormControl>
-                    <Input placeholder="example@gmail.com" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

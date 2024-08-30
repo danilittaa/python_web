@@ -18,8 +18,9 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { redirect } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "@/axiosConfig";
+import { Switch } from "@/lib/switch";
 
 interface IProps {
   children: React.ReactNode;
@@ -33,12 +34,13 @@ const formSchema = z.object({
     .email({
       message: "Неправильний формат пошти.",
     }),
-  name: z.string().min(2, {
-    message: "Імя має бути довшим 2 символів.",
+  username: z.string().min(2, {
+    message: "Імя має бути довшим 1 символа.",
   }),
   password: z.string().min(2, {
     message: "Пароль має бути довшим 2 символів.",
   }),
+  isCoach: z.boolean().default(true),
 });
 
 const SignUpPopup: React.FC<IProps> = ({ children }) => {
@@ -46,14 +48,24 @@ const SignUpPopup: React.FC<IProps> = ({ children }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      name: "",
+      username: "",
       password: "",
+      isCoach: false,
     },
   });
   const navigate = useNavigate();
 
-  const onSubmit = (values: any) => {
-    navigate("/home");
+  const onSubmit = async (values: any) => {
+    try {
+      const res = await axios.post("register/", {
+        role: values.isCoach ? "coach" : "athlete",
+        ...values,
+      });
+      localStorage.setItem("role", res.data.user.role);
+      navigate("/home");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -80,7 +92,7 @@ const SignUpPopup: React.FC<IProps> = ({ children }) => {
             />
             <FormField
               control={form.control}
-              name="name"
+              name="username"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Імя</FormLabel>
@@ -101,6 +113,21 @@ const SignUpPopup: React.FC<IProps> = ({ children }) => {
                     <Input {...field} type="password" />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isCoach"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <FormLabel>Тренер?</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
