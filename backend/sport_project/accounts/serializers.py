@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from .models import MedicalData
 
 User = get_user_model()
 
@@ -24,3 +25,14 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+
+
+class MedicalDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MedicalData
+        fields = ('id', 'user', 'measurement_type', 'value', 'measurement_date')
+
+    def validate_value(self, value):
+        if value <= 0:
+            raise ValidationError("Value must be positive.")
+        return value
