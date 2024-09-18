@@ -1,5 +1,14 @@
+import { getUser } from "@/services/getUser";
+import { AthleteHome } from "./AthleteHome";
+
 const Home = () => {
-  const role = localStorage.getItem("role");
+  const role = getUser()?.role || "";
+  const isAthlete = role === "athlete";
+
+  if (isAthlete) {
+    return <AthleteHome />;
+  }
+
   return (
     <>
       <p>home</p>

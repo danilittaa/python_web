@@ -46,7 +46,7 @@ const SignInPopup: React.FC<IProps> = ({ children }) => {
   const onSubmit = async (values: any) => {
     try {
       const res = await axios.post("login/", values);
-      localStorage.setItem("role", res.data.user.role);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/home");
     } catch (error) {
       console.error(error);
