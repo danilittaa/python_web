@@ -7,7 +7,7 @@ const AthleteHome: React.FC = () => {
     <div className="bg-gray-200/50 h-screen overflow-y-hidden">
       <PageHeader />
       <PageNavigation />
-      <div className="pl-52 pr-32">
+      <div className="pl-32 pr-32">
         <HealthPage />
       </div>
     </div>

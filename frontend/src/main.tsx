@@ -4,6 +4,7 @@ import WelcomePage from "./pages/WelcomePage.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Home from "./pages/Home.tsx";
+import "react-calendar/dist/Calendar.css";
 
 const router = createBrowserRouter([
   {

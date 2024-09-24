@@ -6,7 +6,7 @@ type Props = {
 
 const MedicalItem: React.FC<Props> = ({ icon, name, value }) => {
   return (
-    <div className="bg-white p-3 rounded-xl flex gap-4">
+    <div className="bg-white p-3 rounded-xl flex gap-4 w-[250px]">
       <div className="rounded-xl bg-blue-300 size-14 flex items-center justify-center">
         {icon}
       </div>

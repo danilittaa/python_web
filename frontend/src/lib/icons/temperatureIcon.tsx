@@ -7,6 +7,7 @@ const TemperatureIcon = ({ size = 30 }: IconProps) => {
       height={size}
       viewBox="0 0 48 48"
       xmlns="http://www.w3.org/2000/svg"
+      fill="#fff"
     >
       <path d="M0 0h48v48H0z" fill="none" />
       <g id="Shopicon">

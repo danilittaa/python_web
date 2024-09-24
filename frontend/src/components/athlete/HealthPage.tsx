@@ -8,28 +8,62 @@ import { WaterIcon } from "@/lib/icons/waterIcon";
 import { CaloriesIcon } from "@/lib/icons/caloriesIcon";
 import { WeightIcon } from "@/lib/icons/weightIcon";
 import { TemperatureIcon } from "@/lib/icons/temperatureIcon";
+import Calendar from "react-calendar";
+import AddMedicalData from "../popups/AddMedicalData";
+
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const HealthPage: React.FC = () => {
   const user = getUser() || "";
   const [medicalData, setMedicalData] = useState<any>([]);
+  const [date, setDate] = useState<Value>(new Date());
+  const [isAddMedicalPopupOpen, setIsMedicalPopupOpen] = useState(false);
+
+  const getMedicalData = async () => {
+    try {
+      const data = (await axios.get("/medical-data/?user_id=" + user.id)).data;
+      const latestMedicalData = data
+        .filter((item: any) => {
+          const itemDate = new Date(item.measurement_date).toDateString();
+          const selectedDate = new Date(date as Date).toDateString();
+
+          return itemDate === selectedDate;
+        })
+        .reduce((acc: any, item: any) => {
+          acc[item.measurement_type] = item;
+          return acc;
+        }, {});
+      setMedicalData(Object.values(latestMedicalData));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const getMedicalData = async () => {
-      try {
-        setMedicalData(
-          (await axios.get("/medical-data/?user_id=" + user.id)).data
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    };
     getMedicalData();
-  }, []);
+  }, [date]);
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between mt-6">
       <div>
-        <h2 className="text-4xl">Welcome Back, {user.username}</h2>
+        <div className="flex justify-between px-6">
+          <h2 className="text-4xl mr-4">Вітаємо Вас, {user.username}</h2>
+
+          <button
+            onClick={() => setIsMedicalPopupOpen(true)}
+            className="border border-gray-600 rounded-xl hover:border-blue-300 hover:text-blue-300 px-4 py-2"
+          >
+            Додати показник
+          </button>
+          <AddMedicalData
+            isOpen={isAddMedicalPopupOpen}
+            onClose={() => setIsMedicalPopupOpen(false)}
+            currentDate={date}
+            onSuccess={getMedicalData}
+          />
+        </div>
         <div className="flex flex-wrap gap-7 py-7">
           {medicalData?.map((item: any) => {
             let icon = <></>;
@@ -64,11 +98,7 @@ const HealthPage: React.FC = () => {
         </div>
       </div>
       <div>
-        <img
-          src="images/human_body.png"
-          alt="human body"
-          className="w-[400px] rounded-3xl"
-        />
+        <Calendar onChange={setDate} value={date} />
       </div>
     </div>
   );
