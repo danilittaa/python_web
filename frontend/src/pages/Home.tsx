@@ -1,13 +1,16 @@
+import { getUser } from "@/services/getUser";
+import { AthleteHome } from "./AthleteHome";
+import { CoachHome } from "./CoachHome";
+
 const Home = () => {
-  const role = localStorage.getItem("role");
-  return (
-    <>
-      <p>home</p>
-      <p>
-        role: <span>{role}</span>
-      </p>
-    </>
-  );
+  const role = getUser()?.role || "";
+  const isAthlete = role === "athlete";
+
+  if (isAthlete) {
+    return <AthleteHome />;
+  }
+
+  return <CoachHome />;
 };
 
 export default Home;

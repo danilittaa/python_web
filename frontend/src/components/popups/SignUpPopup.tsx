@@ -61,7 +61,7 @@ const SignUpPopup: React.FC<IProps> = ({ children }) => {
         role: values.isCoach ? "coach" : "athlete",
         ...values,
       });
-      localStorage.setItem("role", res.data.user.role);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/home");
     } catch (error) {
       console.error(error);

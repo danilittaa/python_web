@@ -1,9 +1,11 @@
-const LogoIcon = () => {
+import { IconProps } from "./iconProps.props";
+
+const LogoIcon = ({ size = 20 }: IconProps) => {
   return (
     <svg
       fill="rgb(96 165 250)"
-      height="25px"
-      width="25px"
+      height={size}
+      width={size}
       version="1.1"
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"
