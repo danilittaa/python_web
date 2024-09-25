@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Home from "./pages/Home.tsx";
 import "react-calendar/dist/Calendar.css";
+import { PageProvider } from "./context/pageContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <PageProvider>
+      <RouterProvider router={router} />
+    </PageProvider>
   </StrictMode>
 );

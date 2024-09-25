@@ -1,5 +1,6 @@
 import { getUser } from "@/services/getUser";
 import { AthleteHome } from "./AthleteHome";
+import { CoachHome } from "./CoachHome";
 
 const Home = () => {
   const role = getUser()?.role || "";
@@ -9,14 +10,7 @@ const Home = () => {
     return <AthleteHome />;
   }
 
-  return (
-    <>
-      <p>home</p>
-      <p>
-        role: <span>{role}</span>
-      </p>
-    </>
-  );
+  return <CoachHome />;
 };
 
 export default Home;

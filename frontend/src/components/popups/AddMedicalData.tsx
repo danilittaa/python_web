@@ -64,6 +64,7 @@ const AddMedicalData: React.FC<IProps> = ({
         measurement_date: currentDate,
         user: getUser().id,
       });
+      form.reset();
       onSuccess();
       onClose();
     } catch (error) {
